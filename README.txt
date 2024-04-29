@@ -29,11 +29,10 @@ calc_times.m
 -This MATLAB function, calc_times, calculates the time of flight for ultrasound 
 -waves between array elements and specified focal points, useful in applications 
 -like ultrasound image reconstruction. It takes inputs of focal points (foci), 
--element positions (elempos), and a speed of sound, which can be a constant 
-value or specified via a 2D map. The function computes the distance between 
--each element and focal point to determine the propagation time. The output, 
--foc_times, is an M x N matrix that lists these times for all combinations of 
--focal points and elements.
+-element positions (elempos) and a constant speed of sound. The function computes 
+-the distance between each element and focal point to determine the propagation time. 
+-The output, foc_times, is an M x N matrix that lists these times for all combinations 
+-of focal points and elements.
 
 calc_timesVIAlg.m
 -This MATLAB function, calc_timesVIAlg, calculates the time of flight for 
