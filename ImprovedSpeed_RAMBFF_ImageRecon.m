@@ -12,9 +12,7 @@ else
 end
 
 % Adjust Time Axis
-nsamplesoffset = 24; % See RAMBFF1024CoherenceFactor.m
-% SV439_Malignancy.mat: approximately 24-24.5
-% SV113_BenignCyst.mat: approximately 17.5 
+nsamplesoffset = 24; 
 dt = mean(diff(time));
 fs = 1/dt; % sampling rate [Hz]
 time = time - nsamplesoffset * dt;
