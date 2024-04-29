@@ -8,7 +8,7 @@
 % x - Coordinate Positions in the Horizontal Direction
 % z - Coordinate Positions in the Vertical Direction
 
-load('AbdominalMap3.mat'); % From Link In GitHub Repository 
+load('AbdominalMap3.mat'); % From Link In RAMBFF Release v1.0.0
 %% Define Parameters and Points to Focus At 
 dBrange = [-40, 0]; c = 1500; 
 wave_length = c/1.0e6; 
