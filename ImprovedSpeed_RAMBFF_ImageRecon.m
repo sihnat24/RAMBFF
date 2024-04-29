@@ -1,9 +1,9 @@
-
-% Loading the dataset
-load("SV113_BenignCyst.mat") % Use the SV cases (1024 elements) 
-sound_struct = load("BenignCystSoS.mat");
-%% 
-
+clear 
+clc 
+%% Loading the dataset
+load("BrainInAlcohol.mat") % Load Ultrasound Dataset
+sound_struct = load("BrainInAlcohol_SoS.mat");
+%% Initial Parameters, Focus Points, Filtering, and Windowing
 % Gain Correction
 if exist('gain_correction','var')
     full_dataset = single(full_dataset) .* gain_correction;
@@ -28,7 +28,6 @@ transducerPosY = radius*sin(transducerPosAngle);
 transducerPositionsXY = [transducerPosX; transducerPosY];
 AptPos = transpose(cat(1,transducerPositionsXY(1,:), ...
     zeros(1,size(transducerPositionsXY,2)),transducerPositionsXY(2,:)));
-
 
 % Physical Parameters
 c = 1500; % sound speed [m/s]
@@ -67,10 +66,10 @@ anglefcn = @(ang,angrng) (1+cos(max(-pi,min(pi,2*wrapToPi(ang)/angrng))))/2;
 angrng = 0.5; % Percentage of Angular Range [-pi/2, pi/2];
 cosangfcn = @(cosang) anglefcn(real(acos(cosang)),angrng);
 
-%% 
+%% Calculate Times and Scaled Focus Points of Interest
 % Simple one time calculation for times, generate M x N of original grid
-%small_times = calc_times(foc_pts,AptPos,c); % Get times from focal points to aperture points
-small_times = calc_timesVIAlg(foc_pts,AptPos,sound_struct,100); % Custom Speed of Sound Map Code 
+%small_times = calc_times(foc_pts,AptPos,c); % Get times with constant speed of sound 
+small_times = calc_timesVIAlg(foc_pts,AptPos,sound_struct,100); % Get times with custom Speed of Sound Map Code 
 small_acceptwin = calc_acceptwin(foc_pts,AptPos,cosangfcn); % Get corresponding receiver acceptance windows for focal points
 reshaped_small_times = zeros(npts,npts,length(AptPos)); % create zero vector for reshaped matrices
 reshaped_small_acceptwindow = zeros(npts,npts,length(AptPos));
@@ -85,7 +84,7 @@ for i = 1:length(AptPos) % reshape matrix to (npts) x (npts) x (# of elements)
 end
 
 tic
-scale_factor = 4; % Set scale factor to enlarge original grid
+scale_factor = 4; % Set scale factor to enlarge original grid of focus points
 x_img_scaled = linspace(-radius,radius,scale_factor * npts); % enlarge original grid by scale factor for new focus points
 z_img_scaled= linspace(-radius,radius,scale_factor * npts);
 [X_scaled,Y,Z_scaled] = meshgrid(x_img_scaled, 0, z_img_scaled);
@@ -96,7 +95,7 @@ focData_insideR = zeros(size(foc_pts_scaled_insideR,1), 1); % focused Data insid
 insideR_idx = find(insideR);% find indices of focus points for final image
 [theta_foc,~] = cart2pol(foc_pts_scaled_insideR(:,1),foc_pts_scaled_insideR(:,3)); % Polar Coordinates for Identifying Focal Points for Each Transmitter
 toc
-%%
+%% Calculate Corresponding Ultrasound Data 
 for idx_1 = 1:length(AptPos) % idx_1 is transmitters, idx_2 is receivers
     tic 
     [theta_apt,~] = cart2pol(AptPos(idx_1,1),AptPos(idx_1,3)); % Polar Coordinate of element of interest
@@ -122,7 +121,7 @@ for idx_1 = 1:length(AptPos) % idx_1 is transmitters, idx_2 is receivers
      disp(['Tx Element ',num2str(idx_1)])
      toc
 end
-
+%% Reshape Data and Display Image
 focData_full = zeros(length(foc_pts_scaled),1); % Pad zeros outside of insideR focus points to display properly
 focData_full(insideR_idx) = focData_insideR; 
 img_h= permute(reshape(focData_full,[numel(x_img_scaled), numel(z_img_scaled)]), [2,1]); % Rearrange focused data into Grid for Image
@@ -133,7 +132,4 @@ imagesc(1000*x_img_scaled, 1000*z_img_scaled, ...
     20*log10(abs(img_h)/max(abs(img_h(:)))), dBrange); 
 axis image; xlabel('Lateral [mm]'); ylabel('Axial [mm]');
 title('DAS Beamforming'); colormap(gray); colorbar();
-
-
-
 
