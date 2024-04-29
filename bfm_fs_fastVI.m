@@ -1,5 +1,5 @@
-function foc_data = bfm_fs_fastVI(x,z,t, signal, foc_pts, ...
-    rxAptPos, txAptPos, speed_of_sound)
+function foc_data = bfm_fs_fastVI(x,z,t, signal,foc_pts, ...
+    rxAptPos,txAptPos,speed_of_sound)
 % BFM_FS - Beamforms (Delay and Sum) the RF data at desired locations
 %
 % The function interpolates the RF signals collected using the full synthetic sequence
@@ -16,13 +16,17 @@ function foc_data = bfm_fs_fastVI(x,z,t, signal, foc_pts, ...
 %
 % OUTPUT:
 % foc_data - P x 1 vector with interpolated (RF) data points
-%
+%% Begin Beamforming
+
+sound_struct.xi = x; % Develope Sound Speed Structure for VI Algorithm
+sound_struct.yi = z;
+sound_struct.VEL_ESTIM = speed_of_sound;
 
 % time from the focus to receive  apertures (array elements)
-rx_times = calc_timesVIAlg([x(1) x(length(x))],[z(1) z(length(z))],foc_pts,rxAptPos,speed_of_sound,50); % remove dc_rx
+rx_times = calc_timesVIAlg(foc_pts,rxAptPos,sound_struct,50); % remove dc_rx
 
-% time from the transmit apertures (array elements) to focus
-% tx_times = calc_timesVIAlg([x(1) x(length(x))],[z(1) z(length(z))],foc_pts,txAptPos,speed_of_sound,50);% remove dc_tx
+% time from the transmit apertures (array elements) to focus - Can ignore if same as receive
+% tx_times = calc_timesVIAlg(foc_pts,txAptPos,speed_of_sound,50);% remove dc_tx
 
 % focused but not summed rf data
 foc_data=zeros(size(foc_pts,1), 1);
