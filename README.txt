@@ -1,3 +1,10 @@
+CONTACT INFORMATION
+Severin Ihnat
+ - Phone: 917 716 6187
+ - Email: sihnat2002@gmail.com or si2471@columbia.edu
+________________________________________________________________________________
+
+
 OVERVIEW
 This suite of MATLAB scripts and functions is designed to facilitate advanced 
 ultrasound image reconstruction using Delay-and-Sum (DAS) beamforming 
