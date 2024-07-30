@@ -2,6 +2,10 @@ CONTACT INFORMATION
 Severin Ihnat
  - Phone: 917 716 6187
  - Email: sihnat2002@gmail.com or si2471@columbia.edu
+
+Christian Voloshen
+- Phone: 484 515 4754
+- Email: cvoloshen@gmail.com or ctv26@cornell.edu
 ________________________________________________________________________________
 
 
